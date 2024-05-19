@@ -1,6 +1,7 @@
-use Mix.Config
+import Config
 
-config :logger, level: :debug
+config :logger, :console,
+  level: :debug
 
 config :jwt, :googlecerts, Jwt.GoogleCerts.PublicKey.Mock
 config :jwt, :firebasecerts, Jwt.FirebaseCerts.PublicKey.Mock

@@ -1,10 +1,11 @@
 defmodule Jwt do
-  @google_certs_api Application.get_env(:jwt, :googlecerts, Jwt.GoogleCerts.PublicKey)
-  @firebase_certs_api Application.get_env(:jwt, :firebasecerts, Jwt.FirebaseCerts.PublicKey)
+  @google_certs_api Application.compile_env(:jwt, :googlecerts, Jwt.GoogleCerts.PublicKey)
+  @firebase_certs_api Application.compile_env(:jwt, :firebasecerts, Jwt.FirebaseCerts.PublicKey)
   @invalid_token_error {:error, "Invalid token"}
   @invalid_signature_error {:error, "Invalid signature"}
   @key_id "kid"
 
+  alias Jason
   @doc """
       Verifies a Google or Firebase generated JWT token against the current public certificates and returns the claims
       if the token's signature is verified successfully.
@@ -34,7 +35,7 @@ defmodule Jwt do
 
   defp _verify(_, _), do: @invalid_token_error
 
-  defp extract_key_id(header), do: Jason.decode!(header, %{})[@key_id]
+  defp extract_key_id(header), do: Jason.decode!(header)[@key_id]
 
   defp retrieve_cert_exp_and_mod_for_key(key_id) do
     @google_certs_api.getfor(key_id)
@@ -49,7 +50,7 @@ defmodule Jwt do
     msg = header_b64 <> "." <> claims_b64
 
     case :crypto.verify(:rsa, :sha256, msg, signature, [exponent, modulus]) do
-      true -> {:ok, Jason.decode!(Base.url_decode64!(claims_b64, padding: false), %{})}
+      true -> {:ok, Jason.decode!(Base.url_decode64!(claims_b64, padding: false))}
       false -> @invalid_signature_error
     end
   end

@@ -1,6 +1,6 @@
 defmodule Jwt.Plugs.Verification do
   @expired_token_error {:error, "Expired token."}
-  @timeutils Application.get_env(:jwt, :timeutils, Jwt.TimeUtils)
+  @timeutils Application.compile_env(:jwt, :timeutils, Jwt.TimeUtils)
   @five_minutes 5 * 60
 
   def default_options(), do: %{:ignore_token_expiration => false, :time_window => @five_minutes}

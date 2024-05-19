@@ -1,11 +1,11 @@
-defmodule Jwt.Mixfile do
+defmodule Jwt.MixProject do
   use Mix.Project
 
   def project do
     [
       app: :jwt,
       version: "0.6.0",
-      elixir: "~> 1.3",
+      elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
@@ -27,12 +27,12 @@ defmodule Jwt.Mixfile do
 
   defp deps do
     [
-      {:httpoison, "~> 1.6"},
+      {:httpoison, "~> 2.2.1"},
       {:jason, "~> 1.2"},
       {:ex_doc, only: :dev, runtime: false, github: "elixir-lang/ex_doc"},
-      {:cowboy, "~> 2.8"},
-      {:plug, "~> 1.10"},
-      {:timex, "~> 3.6.1"}
+      {:cowboy, "~> 2.12.0"},
+      {:plug, "~> 1.16"},
+      {:timex, "~> 3.7.11"}
     ]
   end
 end
